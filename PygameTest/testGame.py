@@ -37,6 +37,11 @@ gameOn = True
 square_position = [40,40]
 key_change = [0,0]
 
+MIN_X = 25
+MIN_Y = 25
+MAX_X = 550
+MAX_Y = 550
+
 # Our game loop 
 while gameOn: 
 	# for loop through the event queue 
@@ -71,15 +76,15 @@ while gameOn:
 		square_position[0] += key_change[0]
 		square_position[1] += key_change[1]
 
-		if square_position[0] < 25:
-			square_position[0] = 25
-		elif square_position[0] > 550:
-			square_position[0] = 550
+		if square_position[0] < MIN_X:
+			square_position[0] = MIN_X
+		elif square_position[0] > MAX_X:
+			square_position[0] = MAX_X
 
-		if square_position[1] < 25:
-			square_position[1] = 25
-		elif square_position[1] > 550:
-			square_position[1] = 550
+		if square_position[1] < MIN_Y:
+			square_position[1] = MIN_Y
+		elif square_position[1] > MAX_Y:
+			square_position[1] = MAX_Y
 
 	# Define where the squares will appear on the screen 
 	# Use blit to draw them on the screen surface 
