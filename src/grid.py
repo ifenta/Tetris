@@ -18,85 +18,91 @@ class Grid:
 
         self.grid = []
         
-        for ii in range(self.width):
+        for x in range(self.width):
             self.grid.append([])
-            for jj in range(self.height):
-                self.grid[ii].append(block.Block((0,0,0),self.block_width,self.block_height,(ii*(self.block_width),jj*(self.block_height))))
+            for y in range(self.height):
+                self.grid[x].append(block.Block((0,0,0),self.block_width,self.block_height,(x*(self.block_width),y*(self.block_height))))
 
-    def move_down(self, screen, pos):
-        if pos != None:
-            if pos[1] < self.GRID_HEIGHT-1:
-                old_blk = self.grid[pos[0]][pos[1]]
-                new_blk = self.grid[pos[0]][pos[1]+1]
-                if new_blk.alive:
-                    return None
-                
-                # Save color of block
-                color = old_blk.color
+    def move_down(self, screen, position):
+        if position != None and position[1] < self.GRID_HEIGHT-1:
 
-                # Fill initial position black
-                old_blk.alive = False
-                old_blk.color = (0,0,0)
-                old_blk.surf.fill( (0,0,0) )  
-                screen.blit( old_blk.surf, old_blk.position )
+            old_block = self.grid[position[0]][position[1]]
+            new_block = self.grid[position[0]][position[1]+1]
 
-                # Fill new block with old color
-                new_blk.alive = True
-                new_blk.color = color
-                new_blk.surf.fill(color)
-                screen.blit( new_blk.surf, new_blk.position )
+            # Check if there is a block below
+            if new_block.occupied:
+                return None
+            
+            # Save color of block
+            color = old_block.color
 
-                pos[1] += 1
-                return pos
-        
+            # Fill initial position black
+            old_block.occupied = False
+            old_block.color = (0,0,0)
+            old_block.surf.fill( (0,0,0) )  
+            screen.blit( old_block.surf, old_block.position )
+
+            # Fill new block with old color
+            new_block.occupied = True
+            new_block.color = color
+            new_block.surf.fill(color)
+            screen.blit( new_block.surf, new_block.position )
+
+            position[1] += 1
+            return position
+    
         return None
 
-    def move_left(self, screen, pos):
-        if pos != None: 
-            if pos[0] > 0:
-                old_blk = self.grid[pos[0]][pos[1]]
+    def move_left(self, screen, position):
+        if position != None and position[0] > 0: 
+            old_block = self.grid[position[0]][position[1]]
+            new_block = self.grid[position[0]-1][position[1]]
 
-                # Save color of block
-                color = old_blk.color
+            # Check if there is a block on the left
+            if new_block.occupied:
+                return position
+            # Save color of block
+            color = old_block.color
 
-                # Fill initial position black
-                old_blk.alive = False
-                old_blk.color = (0,0,0)
-                old_blk.surf.fill( (0,0,0) )  
-                screen.blit( old_blk.surf, old_blk.position )
+            # Fill initial position black
+            old_block.occupied = False
+            old_block.color = (0,0,0)
+            old_block.surf.fill( (0,0,0) )  
+            screen.blit( old_block.surf, old_block.position )
 
-                # Fill new block with old color
-                new_blk = self.grid[pos[0]-1][pos[1]]
-                new_blk.alive = True
-                new_blk.color = color
-                new_blk.surf.fill(color)
-                screen.blit( new_blk.surf, new_blk.position )
+            # Fill new block with old color
+            new_block.occupied = True
+            new_block.color = color
+            new_block.surf.fill(color)
+            screen.blit( new_block.surf, new_block.position )
 
-                pos[0] -= 1
-        return pos
+            position[0] -= 1
+        return position
 
-    def move_right(self, screen, pos):
-        if pos != None:
-            if pos[0] < self.GRID_WIDTH-1:
-                old_blk = self.grid[pos[0]][pos[1]]
-                # Save color of block
-                color = old_blk.color
+    def move_right(self, screen, position):
+        if position != None and position[0] < self.GRID_WIDTH-1:
+            old_block = self.grid[position[0]][position[1]]
+            new_block = self.grid[position[0]+1][position[1]]
 
-                # Fill initial position black
-                old_blk.alive = False
-                old_blk.color = (0,0,0)
-                old_blk.surf.fill( (0,0,0) )  
-                screen.blit( old_blk.surf, old_blk.position )
+            # Check if there is a block on the right
+            if new_block.occupied:
+                return position
 
-                # Fill new block with old color
-                new_blk = self.grid[pos[0]+1][pos[1]]
-                new_blk.alive = True
-                new_blk.color = color
-                new_blk.surf.fill(color)
-                screen.blit( new_blk.surf, new_blk.position )
+            # Save color of block
+            color = old_block.color
 
-                pos[0] += 1
-        return pos
+            # Fill initial position black
+            old_block.occupied = False
+            old_block.color = (0,0,0)
+            old_block.surf.fill( (0,0,0) )  
+            screen.blit( old_block.surf, old_block.position )
+
+            # Fill new block with old color
+            new_block.occupied = True
+            new_block.color = color
+            new_block.surf.fill(color)
+            screen.blit( new_block.surf, new_block.position )
+
+            position[0] += 1
+        return position
         
-        
-

@@ -1,7 +1,6 @@
 import pygame 
 from pygame.locals import *
 
-import block
 import grid
 import timer
 
@@ -25,24 +24,20 @@ gameOn = True
 # Set screen black initially
 screen.fill((0,0,0))
 
-'''
-# Sets each block in the grid to a random color
-for x in grid.grid:
-	for y in x:
-		y.surf.fill( ( random.randint(0,255),random.randint(0,255),random.randint(0,255) ) )  
-		screen.blit(y.surf, y.position)
-'''
+# Place holder for initializing a block
+# Set position
+pos = [random.randint(0,9),0]
+block = grid.grid[pos[0]][pos[1]]
+# Set color
+block.color = random.randint(0,255)
+block.surf.fill(block.color)  
+# Pass to screen
+screen.blit( block.surf, block.position )
+pygame.display.flip()
 
-pos = [4,0]
-
-blk = grid.grid[pos[0]][pos[1]]
-
-blk.color = (0,200,255)
-blk.surf.fill( (0,200,255) )  
-screen.blit( blk.surf, blk.position )
-
+# Control Drop Speed
 drop_speed_control = timer.Timer()
-drop_speed = 1000
+drop_delay = 1000
 
 try:
 	# Our game loop 
@@ -67,21 +62,21 @@ try:
 					pygame.display.flip()
 
 				elif event.key == K_DOWN:
-					drop_speed -= 100
-					if drop_speed < 0:
-						drop_speed = 0
+					drop_delay -= 100
+					if drop_delay < 0:
+						drop_delay = 0
 
 				elif event.key == K_UP:
-					drop_speed += 100
-					if drop_speed > 2000:
-						drop_speed = 2000
+					drop_delay += 100
+					if drop_delay > 2000:
+						drop_delay = 2000
 
 			# Check for QUIT event 
 			elif event.type == QUIT: 
 				gameOn = False
 
 		
-		if drop_speed_control.time_check(drop_speed):
+		if drop_speed_control.time_check(drop_delay):
 			# Update the display using flip 
 			pos = grid.move_down(screen, pos)
 			pygame.display.flip() 
@@ -90,11 +85,11 @@ try:
 				# Create new block
 				pos = [random.randint(0,9),0]
 
-				blk = grid.grid[pos[0]][pos[1]]
+				block = grid.grid[pos[0]][pos[1]]
 
-				blk.color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
-				blk.surf.fill( blk.color )  
-				screen.blit( blk.surf, blk.position )
+				block.color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+				block.surf.fill( block.color )  
+				screen.blit( block.surf, block.position )
 
 		
 except KeyboardInterrupt:
