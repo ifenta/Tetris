@@ -28,6 +28,7 @@ class Block:
         self.width = width
         self.height = height
         self.position = position
+        self.alive = False
 
         self.surf = pygame.Surface((width,height)) 
 		
