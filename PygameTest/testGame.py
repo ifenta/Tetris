@@ -12,12 +12,13 @@ class Square(pygame.sprite.Sprite):
 	def __init__(self, color, size): 
 		super(Square, self).__init__() 
 		
+		self.color = color
 		# Define the dimension of the surface 
 		# Here we are making squares of side 25px 
 		self.surf = pygame.Surface(size) 
 		
 		# Define the color of the surface using RGB color coding. 
-		self.surf.fill(color) 
+		self.surf.fill(self.color) 
 		self.rect = self.surf.get_rect() 
 
 # initialize pygame 
@@ -55,6 +56,7 @@ while gameOn:
 			if event.key == K_BACKSPACE: 
 				gameOn = False
 
+			square1.surf.fill((255,0,0)) 
 			if event.key == K_UP:
 				key_change[1] = -25
 			elif event.key == K_LEFT:
@@ -65,6 +67,7 @@ while gameOn:
 				key_change[1] = 25
 
 		elif event.type == KEYUP:
+			square1 = Square((0, 200, 255),(25,25)) 
 			key_change[0] = 0
 			key_change[1] = 0
 
