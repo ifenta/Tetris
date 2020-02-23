@@ -16,6 +16,16 @@ class Grid:
         self.block_width = self.width/self.GRID_WIDTH
         self.block_height = self.height/self.GRID_HEIGHT
 
+        # index 0 = row on top of screen
+        # counts number of alive blocks in each row
+        # once the counter reachs 10 in any index, delete all blocks in those rows
+        self.alive_blocks_in_rows = [0]*self.GRID_HEIGHT
+
+        # index 0 = column on left of screen
+        # counts number of alive blocks in each column
+        # once the counter reachs 20 in any index, game over
+        self.alive_blocks_in_columns = [0]*self.GRID_WIDTH
+
         self.grid = []
         
         for x in range(self.width):
@@ -105,4 +115,6 @@ class Grid:
 
             position[0] += 1
         return position
-        
+
+    ##def kill_row(self, row: int):
+        ##for 

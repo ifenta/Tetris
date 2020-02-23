@@ -29,7 +29,7 @@ screen.fill((0,0,0))
 pos = [random.randint(0,9),0]
 block = grid.grid[pos[0]][pos[1]]
 # Set color
-block.color = random.randint(0,255)
+block.color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
 block.surf.fill(block.color)  
 # Pass to screen
 screen.blit( block.surf, block.position )
@@ -51,6 +51,7 @@ try:
 				# If the Backspace key has been pressed set 
 				# running to false to exit the main loop 
 				if event.key == K_BACKSPACE: 
+					print("Backspace Pressed")
 					gameOn = False
 
 				if event.key == K_LEFT:
@@ -78,10 +79,25 @@ try:
 		
 		if drop_speed_control.time_check(drop_delay):
 			# Update the display using flip 
+			old_pos = pos
 			pos = grid.move_down(screen, pos)
 			pygame.display.flip() 
-
+			
+			# block reaches bottom of screen
 			if pos == None:
+				
+				grid.alive_blocks_in_columns[old_pos[0]] +=1
+				grid.alive_blocks_in_rows[old_pos[1]] += 1
+
+				for columns in grid.alive_blocks_in_columns:
+					if columns >= grid.GRID_HEIGHT-4:
+						print("Game Over")
+						gameOn = False
+
+				#for rows in grid.alive_blocks_in_rows:
+				#	if rows >= 3:
+						
+
 				# Create new block
 				pos = [random.randint(0,9),0]
 
