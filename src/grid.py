@@ -35,16 +35,17 @@ class Grid:
 
     def move_down(self, screen, position):
         if position != None and position[1] < self.GRID_HEIGHT-1:
-
+            
             old_block = self.grid[position[0]][position[1]]
             new_block = self.grid[position[0]][position[1]+1]
-
+            
             # Check if there is a block below
             if new_block.occupied:
                 return None
             
-            # Save color of block
+            # Save color and state of block
             color = old_block.color
+            occupied_state = old_block.occupied
 
             # Fill initial position black
             old_block.occupied = False
@@ -53,7 +54,7 @@ class Grid:
             screen.blit( old_block.surf, old_block.position )
 
             # Fill new block with old color
-            new_block.occupied = True
+            new_block.occupied = occupied_state
             new_block.color = color
             new_block.surf.fill(color)
             screen.blit( new_block.surf, new_block.position )
@@ -116,5 +117,31 @@ class Grid:
             position[0] += 1
         return position
 
-    ##def kill_row(self, row: int):
-        ##for 
+    def kill_row(self, screen, row: int):
+        for x in range(self.GRID_WIDTH):
+            kill_block = self.grid[x][row]
+            kill_block.occupied = False
+            kill_block.color = (0,0,0)
+            kill_block.surf.fill(kill_block.color)
+            screen.blit( kill_block.surf, kill_block.position)
+            
+            self.alive_blocks_in_columns[x] -= 1
+
+        #reset alive blocks
+        self.alive_blocks_in_rows[row] = 0
+
+        for x in range(self.GRID_WIDTH):
+            for y in range(row,-1,-1):
+                if y != row:
+                    self.move_down(screen, [x,y])
+
+                if x == 0:
+                    if y != 0:
+                        self.alive_blocks_in_rows[y] = self.alive_blocks_in_rows[y-1]
+                    else:
+                        self.alive_blocks_in_rows[y] = 0
+
+        
+                
+                
+

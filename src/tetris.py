@@ -63,14 +63,17 @@ try:
 					pygame.display.flip()
 
 				elif event.key == K_DOWN:
+					#drop block to bottom
+					while(pos != None):
+						if pos != None:
+							old_pos = pos
+						pos = grid.move_down(screen, pos)
+						pygame.display.flip()
+
+				elif event.key == K_UP:
 					drop_delay -= 100
 					if drop_delay < 0:
 						drop_delay = 0
-
-				elif event.key == K_UP:
-					drop_delay += 100
-					if drop_delay > 2000:
-						drop_delay = 2000
 
 			# Check for QUIT event 
 			elif event.type == QUIT: 
@@ -79,13 +82,13 @@ try:
 		
 		if drop_speed_control.time_check(drop_delay):
 			# Update the display using flip 
-			old_pos = pos
-			pos = grid.move_down(screen, pos)
-			pygame.display.flip() 
+			if pos != None:
+				old_pos = pos
+				pos = grid.move_down(screen, pos)
+				pygame.display.flip() 
 			
 			# block reaches bottom of screen
 			if pos == None:
-				
 				grid.alive_blocks_in_columns[old_pos[0]] +=1
 				grid.alive_blocks_in_rows[old_pos[1]] += 1
 
@@ -94,15 +97,15 @@ try:
 						print("Game Over")
 						gameOn = False
 
-				#for rows in grid.alive_blocks_in_rows:
-				#	if rows >= 3:
-						
+				for row in range(len(grid.alive_blocks_in_rows)):
+					if grid.alive_blocks_in_rows[row] >= grid.GRID_WIDTH:
+						grid.kill_row(screen, row)
 
 				# Create new block
 				pos = [random.randint(0,9),0]
 
 				block = grid.grid[pos[0]][pos[1]]
-
+				block.occupied = True
 				block.color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
 				block.surf.fill( block.color )  
 				screen.blit( block.surf, block.position )
